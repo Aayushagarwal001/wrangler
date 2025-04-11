@@ -64,6 +64,8 @@ directive
     | stringList
     | numberRanges
     | properties
+    | byteSizeArg
+    | timeDurationArg
   )*?
   ;
 
@@ -254,7 +256,7 @@ Bool
  ;
 
 Number
- : Int ('.' Digit*)?
+ : '-'? Int ('.' Digit+)?
  ;
 
 Identifier
@@ -310,4 +312,32 @@ fragment Int
 
 fragment Digit
  : [0-9]
+ ;
+
+fragment BYTE_UNIT 
+: ('B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB' | 'EB') ('i'? 'B')?
+;
+
+fragment TIME_UNIT 
+: ('ns' | 'ms' | 's' | 'm' | 'h' | 'd')
+;
+
+ByteSize
+ : Number BYTE_UNIT
+ ;
+
+TimeDuration
+ : Number TIME_UNIT
+ ;
+
+value
+ : String | Number | Column | Bool | ByteSize | TimeDuration
+ ;
+
+byteSizeArg
+ : ByteSize
+ ;
+
+timeDurationArg
+ : TimeDuration
  ;
